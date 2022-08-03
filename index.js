@@ -62,6 +62,13 @@ async function run() {
       const result = await noticeCollection.deleteOne(query);
       res.send(result);
     });
+    app.delete("/picture/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const query = { _id: ObjectID(id) };
+      const result = await imageCollection.deleteOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }

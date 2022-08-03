@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
+const { ObjectID } = require("bson");
 app.use(cors());
 app.use(express.json());
 const uri =
@@ -21,6 +22,9 @@ async function run() {
     const imageCollection = client
       .db("digilabs-internship")
       .collection("pictures");
+    const contactCollection = client
+      .db("digilabs-internship")
+      .collection("contactData");
     app.get("/notices", async (req, res) => {
       const query = {};
       const cursor = noticeCollection.find(query);
@@ -38,6 +42,25 @@ async function run() {
       console.log(imageUrl);
       const query = { imageUrl };
       const result = await imageCollection.insertOne(query);
+    });
+    app.post("/contactData", async (req, res) => {
+      console.log(req.body);
+      const contactData = req.body;
+      const query = { contactData };
+      const result = await contactCollection.insertOne(query);
+    });
+    app.get("/contactData", async (req, res) => {
+      const query = {};
+      const cursor = contactCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+    app.delete("/notices/:id", async (req, res) => {
+      console.log(req.params.id);
+      const id = req.params.id;
+      const query = { _id: ObjectID(id) };
+      const result = await noticeCollection.deleteOne(query);
+      res.send(result);
     });
   } finally {
   }

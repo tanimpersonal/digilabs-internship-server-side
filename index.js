@@ -69,6 +69,13 @@ async function run() {
       const result = await imageCollection.deleteOne(query);
       res.send(result);
     });
+    app.post("/notices", async (req, res) => {
+      console.log(req.body);
+      const newNotice = req.body;
+      const query = newNotice;
+      const result = await noticeCollection.insertOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }

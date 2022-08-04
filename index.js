@@ -76,6 +76,19 @@ async function run() {
       const result = await noticeCollection.insertOne(query);
       res.send(result);
     });
+    app.put("/notices/:id", async (req, res) => {
+      console.log(req.body);
+      console.log(req.params.id);
+      const id = req.params.id;
+      const update = req.body;
+      const filter = { _id: ObjectID(id) };
+      const updateDoc = {
+        $set: { title: update.title, body: update.body, time: update.time },
+      };
+      console.log(updateDoc);
+      const result = await noticeCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
   } finally {
   }
 }
